@@ -1,15 +1,11 @@
 package net.exiva.toneapp;
 
-import danger.app.*;
+import danger.app.Event;
 
-import danger.ui.*;
-
-import danger.util.DEBUG;
-import danger.app.IPCMessage;
-import danger.app.Registrar;
+import danger.ui.ListView;
 
 public class toneList extends ListView implements Resources, Commands {
-	
+
 	public toneList() {
 	}
 

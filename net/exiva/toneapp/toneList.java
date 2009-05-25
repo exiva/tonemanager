@@ -17,7 +17,6 @@ public class toneList extends ListView implements Resources, Commands {
 		switch (inWidget) {
 			case Event.DEVICE_WHEEL_BUTTON: {
 					toneView.confirmDelete();
-					// toneView.deleteRingTone(title);
 			return true;
 			}
 		}

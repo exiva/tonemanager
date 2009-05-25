@@ -1,0 +1,183 @@
+﻿package "net.exiva.toneapp"
+
+interface "{source}net/exiva/toneapp/Resources.java"
+events "{source}net/exiva/toneapp/Commands.java"
+
+#
+## Application Strings
+#
+string ID_APP_NAME "Ringtone App"
+string ID_APP_CLASS "net.exiva.toneapp.toneapp"
+string ID_VERSION "v@APP_VERSION_MAJOR@.@APP_VERSION_MINOR@/@APP_VERSION_BUILD@"
+string ID_LOCALE "en_US"
+
+#
+## Text Strings
+#
+
+#
+## Bitmaps
+#
+
+#
+## Events
+#
+event ABOUT
+event EVENT_LOAD_FILE
+event EVENT_TONE_ADD_OK
+event EVENT_TONE_ADD_FAIL
+
+#
+## Main Menu
+#
+menu ID_MAIN_MENU
+	menuItem
+		title = "Import a Ringtone"
+		event = EVENT_IMPORT_RINGTONE
+		icon = soundIcon
+		shortcut = 'i'
+	menuItem
+		title = "Delete a Ringtone"
+		event = EVENT_DELETE_RINGTONE
+		icon = trashIcon
+		shortcut = deleteKey
+	divider
+	menuItem
+		title = "About ringtoneapp"
+		event = ABOUT
+endMenu
+
+#
+## Main Screen
+#
+screen ID_MAIN_SCREEN
+	title = "Ringtone App"
+	className = "net.exiva.toneapp.toneView"
+	actionMenu = ID_MAIN_MENU
+	# icon = ID_SMALL_ICON
+	backgroundColor = defaultPaneColor
+	button
+		event = EVENT_IMPORT_RINGTONE
+		id = ID_IMPORT
+		title = "Import Ringtone"
+		initialFocus
+		alignWithParentLeft = 30
+		centerVertically
+	button
+		event = EVENT_DELETE_RINGTONE
+		id = ID_DELETE
+		title = "Delete Ringtone"
+		alignWithParentRight = 54
+		centerVertically
+endScreen
+
+#
+## Ringtone Name TextInput
+#
+textInputAlert ID_NAME_RINGTONE
+	title = "Choose a Name"
+	icon = noteIcon
+	systemDialog
+	overrideMaxWidth
+	text = "Choose a unique name for the Ringtone you are importing."
+	button
+		position = buttonBottom1
+		event = EVENT_SAVE_RINGTONE
+		title = "Save"
+		shortcut = backButton
+		id = ID_SAVE_BUTTON
+	button
+		position = buttonTop1
+		event = EVENT_CANCEL
+		title = "Cancel"
+		shortcut = cancelButton
+		id = ID_CANCEL_BUTTON
+	textField
+		position = top
+		maxLength = 50
+		autoText
+		ignoreNewlines
+		autoCap
+		advanceFocusOnReturn
+		id = ID_RINGTONE_NAME
+endTextInputAlert
+
+#
+## Delete Ringtone Dialog
+#
+dialog ID_DEL_RINGTONE
+	title = "Select a Ringtone to delete"
+	systemDialog
+	# icon = ID_MARQUEE
+	button
+		position = buttonTop1
+		event = EVENT_CANCEL
+		title = "Cancel"
+		shortcut = cancelButton
+		id = ID_CANCEL_BUTTON
+	listView
+		id = ID_RANGT0NEZLIST2
+		className = "net.exiva.toneapp.toneList"
+		alignWithParentTop = 10
+		alignWithParentLeft = 10
+		fillToRight = 10
+		fillToBottom = 10
+		initialFocus
+		hasScrollBar
+	endListView
+endDialog
+
+#
+## Confirm Delete alert
+#
+alert ID_CONFIRM
+	title = "Confirm Deletion"
+	systemDialog
+	icon = trashIcon
+	text = "Are you sure you want to discard %n?"
+	button
+		position = buttonBottom1
+		event = EVENT_CANCEL
+		title = "Cancel"
+		shortcut = cancelButton
+		id = ID_CANCEL_BUTTON
+	button
+		position = buttonBottom2
+		event = EVENT_DELETEIT
+		title = "Discard"
+		shortcut = backButton
+		id = ID_DELETE_BUTTON
+endAlert
+
+#
+## About Alert
+#
+alert ID_ABOUT
+	title = "About"
+	# icon = ID_LARGE_ICON
+	text = "<html><small>" +
+		"<b>"+ID_APP_NAME+" "+ID_VERSION+"</b><br>" +
+		"<b>Written By </b> Travis La Marr<br>" +
+		"&copy; 2009 Cramped Thumbs Software<br>" +
+		"</html></small>"
+endAlert
+
+## Splash Screen
+#
+splashScreen ID_SPLASH_SCREEN_RESOURCE
+	@ IF {screen} = fwvga
+	fwvgaSplashScreen
+	@ ELSEIF {screen} = wqvga
+	wqvgaSplashScreen
+	@ ELSEIF {screen} = qvga
+	qvgaSplashScreen
+	@ ENDIF
+	staticTextBox
+		text = ID_APP_NAME
+		id = ID_APP
+		alignWithParentLeft = 2
+		alignWithParentTop = 0
+		fillToRight = 2
+		transparent
+		doesNotHaveBorder
+endSplashScreen

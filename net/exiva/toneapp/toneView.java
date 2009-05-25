@@ -87,6 +87,9 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 			MenuItem lvitem = lvRangt0n3z.addItem(names);
 			lvitem.setUserData(new Integer(rID));
         }
+		if (tones.size() == 0) {
+			lvRangt0n3z.addItem("No ringtones installed...");
+		}
 		invalidate();
 	}
 
@@ -138,7 +141,7 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 				return true;
 			}
 			case EVENT_DELETE_RINGTONE: {
-				DEBUG.p("DELETIN!");
+				populateListView();
 				dRangtonez.show();
 				return true;
 			}

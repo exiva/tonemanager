@@ -31,6 +31,7 @@ import java.util.Vector;
 public class toneView extends ScreenWindow implements Resources, Commands {
 
 	public static AlertWindow aConfirm;
+	public static AlertWindow aError;
 	public static Button bImport, bDelete;
 	public static byte[] data;
 	public static DialogWindow dRangtonez;
@@ -52,6 +53,7 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 
 	public void onDecoded() {
 		aConfirm = getApplication().getAlert(ID_CONFIRM, this);
+		aError = getApplication().getAlert(ID_ERROR, this);
 		dRangtonez = getApplication().getDialog(ID_DEL_RINGTONE, this);
 		dRingToneName = getApplication().getTextInputAlert(ID_NAME_RINGTONE, this);
 		lvRangt0n3z = (ListView)dRangtonez.getDescendantWithID(ID_RANGT0NEZLIST2);
@@ -85,6 +87,7 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 			String names = tones.get(i);
 			int rID = ToneGallery.getIDFromNameAndGroup(names,"Imported");
 			MenuItem lvitem = lvRangt0n3z.addItem(names);
+			lvitem.setIcon(MetaBitmaps.get(MetaBitmaps.ID_MENU_ICON_RINGTONE));
 			lvitem.setUserData(new Integer(rID));
         }
 		if (tones.size() == 0) {
@@ -108,7 +111,7 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 			is.read(bytes);
 			is.close();
 			return bytes;
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -124,16 +127,39 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 				data = getBytesFromFile(file);
 				if (data == null) return true;
 				name = file.getName();
+				ToneGallery.isSpaceAvailable(data.length, name);
 				nameTone(name);
+				dRingToneName.setMessage("Choose a unique name for the Ringtone you are importing.");
+				dRingToneName.setBitmap(MetaBitmaps.get(MetaBitmaps.ID_ALERT_ICON_NOTE));
 				return true;
 			}
 			case EVENT_TONE_ADD_OK: {
-				DEBUG.p("Tone Added.");
 				populateListView();
 				return true;
 			}
 			case EVENT_TONE_ADD_FAIL: {
-				DEBUG.p("Tone Failed.");
+				switch (e.what) {
+					case ToneGallery.Errors.BAD_FORMAT:
+					aError.setMessage("The selected ringtone is not a valid format. Please try again with a MP3, MID, MIDI or AMR file.");
+					aError.show();
+					break;
+
+					case ToneGallery.Errors.DUPLICATE_ID:
+					dRingToneName.setMessage("There is already a ringtone with that name. Please select a different name.");
+					dRingToneName.setBitmap(MetaBitmaps.get(MetaBitmaps.ID_ALERT_ICON_STOP));
+					nameTone(name);
+					break;
+
+					case ToneGallery.Errors.IO_ERROR:
+					aError.setMessage("There was a General I/O error.");
+					aError.show();
+					break;
+
+					case ToneGallery.Errors.OBJECT_TOO_LARGE:
+					aError.setMessage("The selected ringtone is too large. Please select a smaller ringtone to import.");
+					aError.show();
+					break;
+				}
 				return true;
 			}
 			case EVENT_SAVE_RINGTONE: {

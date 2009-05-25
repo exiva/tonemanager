@@ -1,49 +1,47 @@
 package net.exiva.toneapp;
 
-import danger.app.*;
+import danger.app.Application;
+import danger.app.Event;
 
-import danger.ui.*;
-import danger.ui.file.*;
-
-import danger.util.*;
-
-import danger.audio.ToneGallery;
-import danger.audio.ToneClass;
-import danger.audio.ToneRights;
-import danger.audio.ToneOrigin;
 import danger.audio.Tone;
-import danger.audio.PreviewTone;
-import danger.audio.RingToneObject;
+import danger.audio.ToneClass;
+import danger.audio.ToneGallery;
+import danger.audio.ToneOrigin;
+import danger.audio.ToneRights;
 
-import java.util.Vector;
+import danger.ui.AlertWindow;
+import danger.ui.Button;
+import danger.ui.DialogWindow;
+import danger.ui.file.OpenFileDialog;
+import danger.ui.ListView;
+import danger.ui.Menu;
+import danger.ui.MenuItem;
+import danger.ui.ScreenWindow;
+import danger.ui.TextField;
+import danger.ui.TextInputAlertWindow;
 
-// import java.util.*;
-import java.lang.String;
-import java.io.StringReader;
-import danger.util.MetaStrings;
+import danger.util.DEBUG;
 import danger.util.MetaBitmaps;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
-import java.io.*;
+
+import java.util.Vector;
 
 public class toneView extends ScreenWindow implements Resources, Commands {
 
 	public static AlertWindow aConfirm;
-	TextInputAlertWindow dRingToneName;
-	OpenFileDialog dOpenFile;
-	public static ListView lvRangt0n3z;
-	DialogWindow dRangtonez;
-	PopupMenu pmRangt0n3z;
-	TextField ringtoneName;
-	File file;
-	byte[] data;
-	String name;
-	Menu select;
+	public static Button bImport, bDelete;
+	public static byte[] data;
+	public static DialogWindow dRangtonez;
+	public static File file;
 	public static Integer id;
-	Button bImport, bDelete;
-	Boolean inDeleteDialog = false;
+	public static ListView lvRangt0n3z;
+	public static OpenFileDialog dOpenFile;
+	public static String name;
+	public static TextField ringtoneName;
+	public static TextInputAlertWindow dRingToneName;
+
 	public toneView() {
 	}
 
@@ -53,26 +51,63 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 	}
 
 	public void onDecoded() {
-		// pmRangt0n3z = (PopupMenu)this.getDescendantWithID(RANGTONE_MENU);
 		aConfirm = getApplication().getAlert(ID_CONFIRM, this);
-		dRingToneName = getApplication().getTextInputAlert(ID_NAME_RINGTONE, this);
 		dRangtonez = getApplication().getDialog(ID_DEL_RINGTONE, this);
+		dRingToneName = getApplication().getTextInputAlert(ID_NAME_RINGTONE, this);
 		lvRangt0n3z = (ListView)dRangtonez.getDescendantWithID(ID_RANGT0NEZLIST2);
 		ringtoneName = (TextField)dRingToneName.getDescendantWithID(ID_RINGTONE_NAME);
+
+		//dirty little hack to set OS bitmaps on buttons.
 		bImport = (Button)this.getDescendantWithID(ID_IMPORT);
 		bDelete = (Button)this.getDescendantWithID(ID_DELETE);
 		bImport.setBitmap(MetaBitmaps.get(MetaBitmaps.ID_MENU_ICON_RINGTONE));
 		bImport.setBitmapAlignment(Button.ALIGN_LEFT);
 		bDelete.setBitmap(MetaBitmaps.get(MetaBitmaps.ID_MENU_ICON_TRASH));
 		bDelete.setBitmapAlignment(Button.ALIGN_LEFT);
-		// select.addFromResource(Application.getCurrentApp().getResources(), ID_MAIN_MENU, this);
-		// select = addFromResource(Application.getCurrentApp().getResources(), ID_MAIN_MENU, this);
+
 		super.onDecoded();
 	}
 
 	public final void adjustActionMenuState(Menu menu) {
 		menu.removeAllItems();
 		menu.addFromResource(Application.getCurrentApp().getResources(), ID_MAIN_MENU, this);
+	}
+
+	public void nameTone(String inName) {
+		ringtoneName.setText(inName);
+		dRingToneName.show();
+	}
+	
+	public void populateListView() {
+		lvRangt0n3z.removeAllItems();
+		Vector<String> tones = ToneGallery.getNamesFromGroup("Imported",ToneClass.CUSTOM,ToneRights.DEFAULT);
+		for (int i=0; i < tones.size(); i++) {
+			String names = tones.get(i);
+			int rID = ToneGallery.getIDFromNameAndGroup(names,"Imported");
+			MenuItem lvitem = lvRangt0n3z.addItem(names);
+			lvitem.setUserData(new Integer(rID));
+        }
+		invalidate();
+	}
+
+	public static void confirmDelete() {
+		MenuItem item = lvRangt0n3z.getSelectedItem();
+		id = (Integer)item.getUserData();
+		String title = item.getTitle();
+		aConfirm.setMessage("Are you sure you want to discard "+title);aConfirm.setMessage("Are you sure you want to discard "+title);
+		aConfirm.show();
+	}
+
+    public static byte[] getBytesFromFile(File file) {
+		try {
+			FileInputStream is = new FileInputStream(file);
+			byte[] bytes = new byte[is.available()];
+			is.read(bytes);
+			is.close();
+			return bytes;
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 
 	public boolean receiveEvent(Event e) {
@@ -86,7 +121,7 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 				data = getBytesFromFile(file);
 				if (data == null) return true;
 				name = file.getName();
-				nameTone(name);				
+				nameTone(name);
 				return true;
 			}
 			case EVENT_TONE_ADD_OK: {
@@ -121,45 +156,6 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 			break;
 		}
 		return super.receiveEvent(e);
-	}
-
-	public void nameTone(String inName) {
-		ringtoneName.setText(inName);
-		dRingToneName.show();
-	}
-	
-	public void populateListView() {
-		lvRangt0n3z.removeAllItems();
-		Vector<String> tones = ToneGallery.getNamesFromGroup("Imported",ToneClass.CUSTOM,ToneRights.DEFAULT);
-		for (int i=0; i < tones.size(); i++) {
-			String names = tones.get(i);
-			int rID = ToneGallery.getIDFromNameAndGroup(names,"Imported");
-			MenuItem lvitem = lvRangt0n3z.addItem(names);
-			lvitem.setUserData(new Integer(rID));
-        }
-		invalidate();
-	}
-
-	public static void confirmDelete() {
-		MenuItem item = lvRangt0n3z.getSelectedItem();
-		id = (Integer)item.getUserData();
-		String title = item.getTitle();
-		DEBUG.p("ID: "+id+" Title: "+title);
-		aConfirm.setMessage("Are you sure you want to discard "+title);aConfirm.setMessage("Are you sure you want to discard "+title);
-		aConfirm.show();
-		// return id;
-	}
-    public static byte[] getBytesFromFile(File file) {
-		try {
-			FileInputStream is = new FileInputStream(file);
-			byte[] bytes = new byte[is.available()];
-			is.read(bytes);
-			is.close();
-			return bytes;
-		} catch (Exception ex) {
-			DEBUG.p(ex);
-			return null;
-		}
 	}
 
     public boolean eventWidgetUp(int inWidget, Event e) {

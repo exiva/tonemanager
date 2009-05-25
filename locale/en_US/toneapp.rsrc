@@ -115,11 +115,15 @@ dialog ID_DEL_RINGTONE
 		title = "Cancel"
 		shortcut = cancelButton
 		id = ID_CANCEL_BUTTON
+	staticText
+		id = ID_TEXT
+		alignWithParentTop = 10
+		alignWithParentLeft = 10
+		text = "Press \uF00A to delete a ringtone."
 	listView
 		id = ID_RANGT0NEZLIST2
 		className = "net.exiva.toneapp.toneList"
-		alignWithParentTop = 10
-		alignWithParentLeft = 10
+		positionBelow = ID_TEXT : 5
 		fillToRight = 10
 		fillToBottom = 10
 		initialFocus

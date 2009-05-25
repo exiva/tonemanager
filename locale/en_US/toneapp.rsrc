@@ -154,6 +154,15 @@ alert ID_CONFIRM
 endAlert
 
 #
+## Error
+#
+alert ID_ERROR
+	title = ID_APP_NAME+" Error"
+	icon = cautionIcon
+	text = "There was an unknown error."
+endAlert
+
+#
 ## About Alert
 #
 alert ID_ABOUT

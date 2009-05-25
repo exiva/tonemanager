@@ -24,9 +24,21 @@ import danger.util.DEBUG;
 import danger.util.MetaBitmaps;
 
 import java.io.File;
+import java.io.FilenameFilter; 
 import java.io.FileInputStream;
 
 import java.util.Vector;
+
+class NameFilter implements FilenameFilter {
+	public boolean accept(File dir, String name) {
+		File file = new File(dir, name);
+		if (file.isDirectory()) return true;
+		if (name.endsWith(".mp3") || name.endsWith(".mid") || name.endsWith(".midi") || name.endsWith(".wav")) {
+			return true;
+		}
+		return false;
+    }
+}
 
 public class toneView extends ScreenWindow implements Resources, Commands {
 
@@ -54,6 +66,7 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 	public void onDecoded() {
 		aConfirm = getApplication().getAlert(ID_CONFIRM, this);
 		aError = getApplication().getAlert(ID_ERROR, this);
+		dOpenFile = OpenFileDialog.create(OpenFileDialog.OPEN_OPTIONS_FILTER_OUT_DOT_FILES, null, new NameFilter(), new Event(this, EVENT_LOAD_FILE), null, null);
 		dRangtonez = getApplication().getDialog(ID_DEL_RINGTONE, this);
 		dRingToneName = getApplication().getTextInputAlert(ID_NAME_RINGTONE, this);
 		lvRangt0n3z = (ListView)dRangtonez.getDescendantWithID(ID_RANGT0NEZLIST2);
@@ -119,7 +132,8 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 	public boolean receiveEvent(Event e) {
 		switch (e.type) {
 			case EVENT_IMPORT_RINGTONE: {
-				dOpenFile = OpenFileDialog.createAndShow(OpenFileDialog.OPEN_OPTIONS_FILTER_OUT_DOT_FILES, null, null, new Event(this, EVENT_LOAD_FILE), null, null);
+				// dOpenFile = OpenFileDialog.createAndShow(OpenFileDialog.OPEN_OPTIONS_FILTER_OUT_DOT_FILES, null, new NameFilter(), new Event(this, EVENT_LOAD_FILE), null, null);
+				dOpenFile.show();
 				return true;
 			}
 			case EVENT_LOAD_FILE: {

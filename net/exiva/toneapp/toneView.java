@@ -169,6 +169,11 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 					aError.show();
 					break;
 
+					case ToneGallery.Errors.MAX_STORED_SPACE_REACHED:
+					aError.setMessage("The maximum allowed space for ringtones has been reached. Delete a ringtone and then try again.");
+					aError.show();
+					break;
+
 					case ToneGallery.Errors.OBJECT_TOO_LARGE:
 					aError.setMessage("The selected ringtone is too large. Please select a smaller ringtone to import.");
 					aError.show();

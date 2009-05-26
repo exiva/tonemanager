@@ -9,6 +9,8 @@ import danger.audio.ToneGallery;
 import danger.audio.ToneOrigin;
 import danger.audio.ToneRights;
 
+import danger.storage.StorageManager;
+
 import danger.ui.AlertWindow;
 import danger.ui.Button;
 import danger.ui.DialogWindow;
@@ -133,7 +135,14 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 	public boolean receiveEvent(Event e) {
 		switch (e.type) {
 			case EVENT_IMPORT_RINGTONE: {
-				dOpenFile.show();
+				String[] storage;
+				storage = StorageManager.getRemovablePaths();
+				if(storage.length > 0) {
+					dOpenFile.show();
+				} else {
+					aError.setMessage("There is no SD Card inserted, or the USB cable is plugged in.");
+					aError.show();
+				}
 				return true;
 			}
 			case EVENT_LOAD_FILE: {

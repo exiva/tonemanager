@@ -34,7 +34,7 @@ class NameFilter implements FilenameFilter {
 		File file = new File(dir, name);
 		if (file.isDirectory()) return true;
 		String lname = name.toLowerCase();
-		if (lname.endsWith(".mp3") || lname.endsWith(".mid") || lname.endsWith(".midi") || lname.endsWith(".wav")) {
+		if (lname.endsWith(".mp3") || lname.endsWith(".mid") || lname.endsWith(".midi") || lname.endsWith(".wav") || lname.endsWith(".amr")) {
 			return true;
 		}
 		return false;
@@ -114,7 +114,7 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 		MenuItem item = lvRangt0n3z.getSelectedItem();
 		id = (Integer)item.getUserData();
 		String title = item.getTitle();
-		aConfirm.setMessage("Are you sure you want to discard "+title);aConfirm.setMessage("Are you sure you want to discard "+title);
+		aConfirm.setMessage("Are you sure you want to discard "+title);
 		aConfirm.show();
 	}
 

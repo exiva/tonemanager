@@ -14,6 +14,21 @@ string ID_LOCALE "en_US"
 #
 ## Text Strings
 #
+string kMenuImportRingtone "Import a Ringtone"
+string kMenuDeleteRingtone "Delete a Ringtone"
+string kAppImportRingtone "Import Ringtone"
+string kAppDeleteRingtone "Delete Ringtone"
+string kTitleName "Choose a Name"
+string kTextName "Choose a unique name for the Ringtone you are importing."
+string kButtonSave "Save"
+string kButtonCancel "Cancel"
+string kButtonDiscard "Discard"
+string kTitleDelete "Select a Ringtone to Delete"
+string kTextDelete "Press \uF00A to delete a ringtone."
+string kTitleConfirm "Confirm Deletion"
+string kTextConfirm "Are you sure you want to discard %n?"
+string kAbout "About"
+
 
 #
 ## Bitmaps
@@ -32,18 +47,18 @@ event EVENT_TONE_ADD_FAIL
 #
 menu ID_MAIN_MENU
 	menuItem
-		title = "Import a Ringtone"
+		title = kMenuImportRingtone
 		event = EVENT_IMPORT_RINGTONE
 		icon = soundIcon
 		shortcut = 'i'
 	menuItem
-		title = "Delete a Ringtone"
+		title = kMenuDeleteRingtone
 		event = EVENT_DELETE_RINGTONE
 		icon = trashIcon
 		shortcut = deleteKey
 	divider
 	menuItem
-		title = "About ringtoneapp"
+		title = kAbout+" "+ID_APP_NAME
 		event = ABOUT
 endMenu
 
@@ -59,14 +74,14 @@ screen ID_MAIN_SCREEN
 	button
 		event = EVENT_IMPORT_RINGTONE
 		id = ID_IMPORT
-		title = "Import Ringtone"
+		title = kAppImportRingtone
 		initialFocus
 		alignWithParentLeft = 30
 		centerVertically
 	button
 		event = EVENT_DELETE_RINGTONE
 		id = ID_DELETE
-		title = "Delete Ringtone"
+		title = kAppDeleteRingtone
 		alignWithParentRight = 54
 		centerVertically
 endScreen
@@ -75,21 +90,21 @@ endScreen
 ## Ringtone Name TextInput
 #
 textInputAlert ID_NAME_RINGTONE
-	title = "Choose a Name"
+	title = kTitleName
 	icon = noteIcon
 	systemDialog
 	overrideMaxWidth
-	text = "Choose a unique name for the Ringtone you are importing."
+	text = kTextName
 	button
 		position = buttonBottom1
 		event = EVENT_SAVE_RINGTONE
-		title = "Save"
+		title = kButtonSave
 		shortcut = backButton
 		id = ID_SAVE_BUTTON
 	button
 		position = buttonTop1
 		event = EVENT_CANCEL
-		title = "Cancel"
+		title = kButtonCancel
 		shortcut = cancelButton
 		id = ID_CANCEL_BUTTON
 	textField
@@ -106,20 +121,19 @@ endTextInputAlert
 ## Delete Ringtone Dialog
 #
 dialog ID_DEL_RINGTONE
-	title = "Select a Ringtone to delete"
+	title = kTitleDelete
 	systemDialog
-	# icon = ID_MARQUEE
 	button
 		position = buttonTop1
 		event = EVENT_CANCEL
-		title = "Cancel"
+		title = kButtonCancel
 		shortcut = cancelButton
 		id = ID_CANCEL_BUTTON
 	staticText
 		id = ID_TEXT
 		alignWithParentTop = 10
 		alignWithParentLeft = 10
-		text = "Press \uF00A to delete a ringtone."
+		text = kTextDelete
 	listView
 		id = ID_RANGT0NEZLIST2
 		className = "net.exiva.toneapp.toneList"
@@ -135,20 +149,20 @@ endDialog
 ## Confirm Delete alert
 #
 alert ID_CONFIRM
-	title = "Confirm Deletion"
+	title = kTitleConfirm
 	systemDialog
 	icon = trashIcon
-	text = "Are you sure you want to discard %n?"
+	text = kTextConfirm
 	button
 		position = buttonBottom1
 		event = EVENT_CANCEL
-		title = "Cancel"
+		title = kButtonCancel
 		shortcut = cancelButton
 		id = ID_CANCEL_BUTTON
 	button
 		position = buttonBottom2
 		event = EVENT_DELETEIT
-		title = "Discard"
+		title = kButtonDiscard
 		shortcut = backButton
 		id = ID_DELETE_BUTTON
 endAlert
@@ -166,7 +180,7 @@ endAlert
 ## About Alert
 #
 alert ID_ABOUT
-	title = "About"
+	title = kAbout+" "+ID_APP_NAME
 	# icon = ID_LARGE_ICON
 	text = "<html><small>" +
 		"<b>"+ID_APP_NAME+" "+ID_VERSION+"</b><br>" +
@@ -175,6 +189,7 @@ alert ID_ABOUT
 		"</html></small>"
 endAlert
 
+#
 ## Splash Screen
 #
 splashScreen ID_SPLASH_SCREEN_RESOURCE

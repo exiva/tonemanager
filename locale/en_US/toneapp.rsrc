@@ -6,7 +6,8 @@ events "{source}net/exiva/toneapp/Commands.java"
 #
 ## Application Strings
 #
-string ID_APP_NAME "Ringtone App"
+string ID_APP_NAME "Ringtone Manager"
+string ID_CHOOSER_CATEGORY "apps"
 string ID_APP_CLASS "net.exiva.toneapp.toneapp"
 string ID_VERSION "v@APP_VERSION_MAJOR@.@APP_VERSION_MINOR@/@APP_VERSION_BUILD@"
 string ID_LOCALE "en_US"
@@ -33,6 +34,13 @@ string kAbout "About"
 #
 ## Bitmaps
 #
+bitmap ID_LARGE_ICON "{base}LargeIcon.png"
+bitmap ID_SMALL_ICON "{base}SmallIcon.png"
+bitmap ID_MINI_ICON "{base}MiniIcon.png"
+@ IF {screen} = wfvga
+bitmap ID_RING_ICON "{base}RingIcon.png"
+@ ENDIF
+bitmap ID_SPLASH_SCREEN "{base}SplashScreenTransparent.png"
 
 #
 ## Events
@@ -66,7 +74,7 @@ endMenu
 ## Main Screen
 #
 screen ID_MAIN_SCREEN
-	title = "Ringtone App"
+	title = ID_APP_NAME
 	className = "net.exiva.toneapp.toneView"
 	actionMenu = ID_MAIN_MENU
 	# icon = ID_SMALL_ICON
@@ -208,4 +216,8 @@ splashScreen ID_SPLASH_SCREEN_RESOURCE
 		fillToRight = 2
 		transparent
 		doesNotHaveBorder
+	image
+		bitmap = ID_SPLASH_SCREEN
+		alignWithParentLeft = 0
+		alignWithParentTop = 0
 endSplashScreen

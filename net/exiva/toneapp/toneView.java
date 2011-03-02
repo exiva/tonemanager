@@ -31,18 +31,6 @@ import java.io.FileInputStream;
 
 import java.util.Vector;
 
-class NameFilter implements FilenameFilter {
-	public boolean accept(File dir, String name) {
-		File file = new File(dir, name);
-		if (file.isDirectory()) return true;
-		String lname = name.toLowerCase();
-		if (lname.endsWith(".mp3") || lname.endsWith(".mid") || lname.endsWith(".midi") || lname.endsWith(".wav") || lname.endsWith(".amr")) {
-			return true;
-		}
-		return false;
-    }
-}
-
 public class toneView extends ScreenWindow implements Resources, Commands {
 
 	public static AlertWindow aConfirm;
@@ -150,7 +138,7 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 				data = getBytesFromFile(file);
 				if (data == null) return true;
 				name = file.getName();
-				ToneGallery.isSpaceAvailable(data.length, name);
+				// ToneGallery.isSpaceAvailable(data.length, name);
 				nameTone(name);
 				dRingToneName.setMessage("Choose a unique name for the Ringtone you are importing.");
 				dRingToneName.setBitmap(MetaBitmaps.get(MetaBitmaps.ID_ALERT_ICON_NOTE));
@@ -227,4 +215,16 @@ public class toneView extends ScreenWindow implements Resources, Commands {
 		}
 		return super.eventWidgetUp(inWidget, e);
 	}
+}
+
+class NameFilter implements FilenameFilter {
+	public boolean accept(File dir, String name) {
+		File file = new File(dir, name);
+		if (file.isDirectory()) return true;
+		String lname = name.toLowerCase();
+		if (lname.endsWith(".mp3") || lname.endsWith(".mid") || lname.endsWith(".midi") || lname.endsWith(".wav") || lname.endsWith(".amr")) {
+			return true;
+		}
+		return false;
+    }
 }
